@@ -108,6 +108,12 @@ export class KeyVaultHelper {
             return;
         }
 
+        // https://github.com/Azure/get-keyvault-secrets/issues/12
+        // https://github.com/Azure/get-keyvault-secrets/issues/24
+        // Azure Keyvaults *must* use hyphens not underscores, POSIX envars *must* use underscores not hyphens
+        // For our purposes we'll replace any hyphens in the retrieved secret name to underscores in the output
+        secretName.replace(/-/g, '_')
+
         core.setSecret(secretValue);
         core.exportVariable(secretName, secretValue);
         core.setOutput(secretName, secretValue);
