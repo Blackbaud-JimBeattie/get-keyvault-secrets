@@ -95,7 +95,11 @@ export class KeyVaultHelper {
                     core.setFailed(util.format("Could not download the secret %s", secretName));
                 }
                 else {
-                    this.setVaultVariable(secretName, secretValue);
+        // https://github.com/Azure/get-keyvault-secrets/issues/12
+        // https://github.com/Azure/get-keyvault-secrets/issues/24
+        // Azure Keyvaults *must* use hyphens not underscores, POSIX envars *must* use underscores not hyphens
+        // For our purposes we'll replace any hyphens in the retrieved secret name to underscores in the output
+                    this.setVaultVariable(secretName.replace('-','_'), secretValue);
                 }
                 
                 return resolve();
@@ -107,16 +111,6 @@ export class KeyVaultHelper {
         if (!secretValue) {
             return;
         }
-
-        // https://github.com/Azure/get-keyvault-secrets/issues/12
-        // https://github.com/Azure/get-keyvault-secrets/issues/24
-        // Azure Keyvaults *must* use hyphens not underscores, POSIX envars *must* use underscores not hyphens
-        // For our purposes we'll replace any hyphens in the retrieved secret name to underscores in the output
-
-        secretName = secretName.replace('-','_');
-
-        console.log('WTF');
-        console.log(secretName);
 
         core.setSecret(secretValue);
         core.exportVariable(secretName, secretValue);
