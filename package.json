@@ -20,6 +20,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "(https://github.com/Azure/get-keyvault-secrets.git)"
+    "url": "(https://github.com/Blackbaud-JimBeattie/get-keyvault-secrets.git)"
   }
 }
